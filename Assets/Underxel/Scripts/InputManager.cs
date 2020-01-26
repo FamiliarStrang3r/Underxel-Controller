@@ -33,7 +33,9 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         HandleRunningInput();
-        HandleCrouchingInput();
+
+        if (!IsRunning)
+            HandleCrouchingInput();
     }
 
     private void HandleRunningInput()

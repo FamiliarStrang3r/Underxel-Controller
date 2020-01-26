@@ -6,29 +6,45 @@ namespace Underxel
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField, Range(0, 10)] private float jumpForce = 5;
-        [SerializeField, Range(0, 5)] private float gravityMultiplier = 2;
+        [System.Serializable]
+        private class SpeedSettings
+        {
+            public float movingSpeed = 0;
+            public float soundDelay = 0;
+        }
+
+        [Header("Run, walk, crouch, stand")]
+        [SerializeField] private SpeedSettings[] speedSetting = null;
+        private SpeedSettings currentSpeed = null;
+
+        [SerializeField] private LayerMask groundMask = 0;
+        [SerializeField, Range(0, 20)] private float jumpForce = 5;
+        [SerializeField, Range(0, 10)] private float gravityMultiplier = 2;
         [SerializeField] private float turnSpeed = 0.1f;
         [SerializeField] private AudioClip[] footstepSounds = null;
 
+        private float groundCheckSize = 0.4f;
         private bool isGrounded = false;
         private Vector3 camForward = Vector3.zero;
         private Quaternion lookDirection = Quaternion.identity;
 
         private Vector3 rotationDirection = Vector3.zero;
         private Vector3 finalMoveVector = Vector3.zero;
+        private Vector3 moveDir = Vector3.zero;
 
         private PlayerCamera playerCam = null;
         private Transform cam = null;
         private Animator anim = null;
-        private Rigidbody rb = null;
+        private CharacterController characterController = null;
         private InputManager inputManager = null;
         private AudioSource audioSource = null;
 
         private float forward = 0;
         private float turn = 0;
         //private float runCycleLegOffset = 0.2f;
-        private Vector3 m_GroundNormal = Vector3.zero;
+        private Vector3 m_GroundNormal = Vector3.up;
+
+        private float distanceTravelled = 0;
 
         private void Start()
         {
@@ -36,7 +52,7 @@ namespace Underxel
             cam = playerCam.transform;
 
             anim = GetComponent<Animator>();
-            rb = GetComponent<Rigidbody>();
+            characterController = GetComponent<CharacterController>();
             inputManager = FindObjectOfType<InputManager>();
             audioSource = GetComponent<AudioSource>();
         }
@@ -44,7 +60,9 @@ namespace Underxel
         private void Update()
         {
             GetInput();
-            Move();
+            ConvertAnimator();
+            HandleAnimator();
+            HandleMoving();
         }
 
         private void FixedUpdate()
@@ -52,13 +70,17 @@ namespace Underxel
             HandleRotation();
         }
 
-        public void OnAnimatorMove()
+        private SpeedSettings GetCurrentSpeed()
         {
-            if (isGrounded && Time.deltaTime > 0)
+            if (inputManager.IsRunning)
             {
-                Vector3 v = anim.deltaPosition / Time.deltaTime;
-                v.y = rb.velocity.y;
-                rb.velocity = v;
+                return speedSetting[0];
+            }
+            else
+            {
+                if (inputManager.IsCrouching) return speedSetting[2];
+                else if (inputManager.HasInput) return speedSetting[1];
+                else return speedSetting[3];
             }
         }
 
@@ -91,7 +113,7 @@ namespace Underxel
             transform.rotation = smoothRotation;
         }
 
-        private void Move()
+        private void ConvertAnimator()
         {
             Vector3 move = finalMoveVector.normalized;
             if (!inputManager.IsRunning && !inputManager.IsCrouching) move *= 0.5f;
@@ -101,29 +123,12 @@ namespace Underxel
             move = Vector3.ProjectOnPlane(move, m_GroundNormal);
             turn = Mathf.Atan2(move.x, move.z);
             forward = move.z;
-
-            HandleAnimator();
-
-            if (isGrounded)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    Vector3 v = rb.velocity;
-                    v.y = jumpForce;
-                    rb.velocity = v;
-                }
-            }
-            else
-            {
-                Vector3 force = (Physics.gravity * gravityMultiplier) - Physics.gravity;
-                rb.AddForce(force);
-            }
         }
 
         private void CheckGroundStatus()
         {
-            isGrounded = Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out var hit, 0.3f);
-            m_GroundNormal = isGrounded ? hit.normal : Vector3.up;
+            isGrounded = Physics.CheckSphere(transform.position, groundCheckSize, groundMask);
+            //Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out var hit, 0.3f, );
         }
 
         private void HandleAnimator()
@@ -133,11 +138,32 @@ namespace Underxel
             anim.SetBool("Crouch", inputManager.IsCrouching);
             anim.SetBool("OnGround", isGrounded);
 
-            if (!isGrounded) anim.SetFloat("Jump", rb.velocity.y);
+            if (!isGrounded) anim.SetFloat("Jump", characterController.velocity.y);
 
             //float runCycle = Mathf.Repeat(anim.GetCurrentAnimatorStateInfo(0).normalizedTime + runCycleLegOffset, 1);
             //float jumpLeg = (runCycle < 0.5f ? 1 : -1) * forward;
             //if (isGrounded) anim.SetFloat("JumpLeg", jumpLeg);
+        }
+
+        private void HandleMoving()
+        {
+            currentSpeed = GetCurrentSpeed();
+
+            if (characterController.isGrounded)
+            {
+                distanceTravelled += characterController.velocity.magnitude * Time.deltaTime * currentSpeed.soundDelay;
+                if(distanceTravelled >= 1)
+                {
+                    distanceTravelled = 0;
+                    PlayFootStepAudio();
+                }
+
+                moveDir = finalMoveVector.normalized * currentSpeed.movingSpeed;
+                if (Input.GetKeyDown(KeyCode.Space)) moveDir.y = jumpForce;
+            }
+
+            moveDir.y -= gravityMultiplier * -Physics.gravity.y * Time.deltaTime;
+            characterController.Move(moveDir * Time.deltaTime);
         }
 
         public void PlayFootStepAudio()
