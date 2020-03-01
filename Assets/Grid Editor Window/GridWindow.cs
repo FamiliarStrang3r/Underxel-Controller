@@ -190,7 +190,7 @@ public class GridWindow : EditorWindow
                 buttons[i] = new Window(brushSettings.Brushes[i].name, null);
             }
 
-            toolbar = new EditorToolbar(0, buttons.ToList());
+            toolbar = new EditorToolbar(0, buttons);
 
             UpdateCells();
         }

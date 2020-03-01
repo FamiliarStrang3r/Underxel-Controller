@@ -1,22 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class EditorToolbar
 {
     public int Index;
-    public List<Window> Windows { get; }
-
     public string[] Names { get; }
 
-    public EditorToolbar(int index, List<Window> windows)
+    public EditorToolbar(int index, IEnumerable<Window> windows)
     {
         Index = index;
-        Windows = windows;
-        List<string> temp = new List<string>();
-        for (int i = 0; i < windows.Count; i++) temp.Add(windows[i].Name);
-        Names = temp.ToArray();
+        Names = windows.Select(w => w.Name).ToArray();
     }
 
     public void Draw(Rect rect)
