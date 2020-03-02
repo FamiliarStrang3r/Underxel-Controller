@@ -40,4 +40,14 @@ public class LevelDatabase : ScriptableObject
         if (debugPath) Debug.Log(path);
         AssetDatabase.ImportAsset(path);
     }
+
+    //public void AddLevel(Map map)
+    //{
+    //    var so = CreateInstance<LevelSettings>();
+    //    so.name = levels.Count.ToString();
+    //    levels.Add(so);
+    //    so.SetData(map);
+    //    AssetDatabase.AddObjectToAsset(so, this);
+    //    ImportAsset();
+    //}
 }
