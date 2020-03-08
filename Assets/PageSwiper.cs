@@ -38,14 +38,14 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
         //Debug.Log(Screen.width);
 
-        var points = new Vector3[]
-        {
-            new Vector3(0, 1), new Vector3(1, 1),
-            new Vector3(0, 0), new Vector3(1, 0)
-        };
-        var center = Vector3.zero;
-        points.GetCenter(ref center);
-        Debug.Log($"center is: {center.ToString()}");
+        //var points = new Vector3[]
+        //{
+        //    new Vector3(0, 1), new Vector3(1, 1),
+        //    new Vector3(0, 0), new Vector3(1, 0)
+        //};
+        //var center = Vector3.zero;
+        //points.GetCenter(ref center);
+        //Debug.Log($"center is: {center.ToString()}");
 
         //new Vector3(0, 0),
         //new Vector3(0, 1),
