@@ -17,7 +17,11 @@ public class SomebodyController : MonoBehaviour
 
     private void Start()
     {
-        walkSpeed = crouchSpeed = runSpeed = 0;
-        isGrounded = isMoving = isCrouching = false;
+        walkSpeed = 0;
+        crouchSpeed = 0;
+        runSpeed = 0;
+        isGrounded = false;
+        isMoving = false;
+        isCrouching = false;
     }
 }

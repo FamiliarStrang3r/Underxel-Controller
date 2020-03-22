@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992fe38d85791594bb3b95630881fd5b, type: 3}
+  m_Name: Turret Database
+  m_EditorClassIdentifier: 
+  turretDatabase:
+  - {fileID: 11400000, guid: 3131ee2ecd7d6c641af814077ef972bf, type: 2}
+  - {fileID: 11400000, guid: 1f12e1f684aa4be4497f79802d9bc824, type: 2}
+  - {fileID: 11400000, guid: 18dc439a1b628f448ad0ce77578236b5, type: 2}
+  - {fileID: 11400000, guid: 0cab1c934bec81747b366b1fb96b34f9, type: 2}
