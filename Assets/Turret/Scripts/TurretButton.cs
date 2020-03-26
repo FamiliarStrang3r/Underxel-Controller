@@ -13,22 +13,31 @@ public class TurretButton : MonoBehaviour, IPointerClickHandler
     private int myIndex = -1;
     private bool isOpen = true;
 
+    private TurretManager turretManager = null;
+
     private void Awake()
     {
         //if want to hide from inspector - cache here
         myIndex = transform.GetSiblingIndex();
+        turretManager = FindObjectOfType<TurretManager>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!isOpen) return;
-        TurretManager.Instance.SetNewIndex(myIndex);
+        turretManager.SetNewIndex(myIndex);
     }
 
     public void UpdateButton(TurretBlueprint turret, int selectedIndex, bool open)
     {
         turretNameText.text = turret.name;
-        //turretImage.sprite = turret.Sprite;
+        Unlock(open);
+        ChangeCheckbox(selectedIndex);
+    }
+
+    public void UpdateButton(Turret turret, int selectedIndex, bool open)
+    {
+        turretNameText.text = turret.gameObject.name;
         Unlock(open);
         ChangeCheckbox(selectedIndex);
     }

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 992fe38d85791594bb3b95630881fd5b, type: 3}
   m_Name: Turret Database
   m_EditorClassIdentifier: 
-  turretDatabase:
-  - {fileID: 11400000, guid: 3131ee2ecd7d6c641af814077ef972bf, type: 2}
-  - {fileID: 11400000, guid: 1f12e1f684aa4be4497f79802d9bc824, type: 2}
-  - {fileID: 11400000, guid: 18dc439a1b628f448ad0ce77578236b5, type: 2}
-  - {fileID: 11400000, guid: 0cab1c934bec81747b366b1fb96b34f9, type: 2}
+  turretPrefabs:
+  - {fileID: 2943554444971895506, guid: 6d1cf3549543cfa41978eb1ca015850d, type: 3}
+  - {fileID: 2943554444971895506, guid: 77e3e1f8a238d1b418e24ef6fd93efe2, type: 3}
+  - {fileID: 2943554444971895506, guid: b6b4b016d01326d43bd321828bb7affc, type: 3}
+  - {fileID: 2943554444971895506, guid: b7cd4b2f0e3440c429397240c9cce5e3, type: 3}
