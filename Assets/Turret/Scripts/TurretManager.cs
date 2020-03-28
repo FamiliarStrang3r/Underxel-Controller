@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class TurretManager : MonoBehaviour
 {
-    [SerializeField] private TurretDatabase turretDatabase = null;
-
     [Header("Buttons")]
     [SerializeField] private Transform buttonsParent = null;
     [SerializeField] private TurretButton turretButtonPrefab = null;
@@ -25,10 +23,10 @@ public class TurretManager : MonoBehaviour
     private void PopulateButtons()
     {
         int has = buttonsParent.childCount;
-        int need = turretDatabase.Length;
+        int need = TurretDatabase.Instance.Length;
         turretButtons = new TurretButton[need];
 
-        Load();
+        LoadFromFile();
 
         for (int i = 0; i < has; i++)
         {
@@ -47,7 +45,8 @@ public class TurretManager : MonoBehaviour
 
         for (int i = 0; i < turretButtons.Length; i++)
         {
-            turretButtons[i].UpdateButton(turretDatabase.GetTurret(i), selectedIndex, saveData.Opened[i]);
+            var t = TurretDatabase.Instance.GetTurret(i);
+            turretButtons[i].UpdateButton(t, selectedIndex, saveData.Opened[i]);
         }
     }
 
@@ -62,17 +61,15 @@ public class TurretManager : MonoBehaviour
 
             selectedIndex = index;
 
-            Save();
+            PlayerPrefs.SetInt(SELECTED_TURRET_INDEX_KEY, selectedIndex);
         }
     }
 
     public static void UnlockAt(int index)
     {
-        string path = Application.dataPath + "/save.json";
-
-        if (File.Exists(path))
+        if (File.Exists(TurretDatabase.SavePath))
         {
-            string json = File.ReadAllText(path);
+            string json = File.ReadAllText(TurretDatabase.SavePath);
 
             SaveData old = JsonUtility.FromJson<SaveData>(json);
 
@@ -80,37 +77,34 @@ public class TurretManager : MonoBehaviour
 
             json = JsonUtility.ToJson(old, true);
 
-            File.WriteAllText(path, json);
+            File.WriteAllText(TurretDatabase.SavePath, json);
 
             Debug.Log($"вы открыли новую турель, ее индекс: {index}");
         }
     }
 
-    private void Save()
+    private void SaveToFile()
     {
-        PlayerPrefs.SetInt(SELECTED_TURRET_INDEX_KEY, selectedIndex);
-
         string json = JsonUtility.ToJson(saveData, true);
-        string path = Application.dataPath + "/save.json";
-        File.WriteAllText(path, json);
+        File.WriteAllText(TurretDatabase.SavePath, json);
     }
 
-    private void Load()
+    private void LoadFromFile()
     {
         selectedIndex = PlayerPrefs.GetInt(SELECTED_TURRET_INDEX_KEY, 0);
 
-        string path = Application.dataPath + "/save.json";
+        int dbLength = TurretDatabase.Instance.Length;
 
-        if (File.Exists(path))
+        if (File.Exists(TurretDatabase.SavePath))
         {
-            string json = File.ReadAllText(path);
+            string json = File.ReadAllText(TurretDatabase.SavePath);
             saveData = JsonUtility.FromJson<SaveData>(json);
 
             var old = saveData.Opened;
 
-            saveData = new SaveData(new bool[turretDatabase.Length]);
+            saveData = new SaveData(new bool[dbLength]);
 
-            int count = turretDatabase.Length < old.Length ? turretDatabase.Length : old.Length;
+            int count = dbLength < old.Length ? dbLength : old.Length;
 
             for (int i = 0; i < count; i++)
             {
@@ -119,7 +113,7 @@ public class TurretManager : MonoBehaviour
         }
         else
         {
-            saveData = new SaveData(new bool[turretDatabase.Length]);
+            saveData = new SaveData(new bool[dbLength]);
 
             for (int i = 0; i < 2; i++)
             {
@@ -127,6 +121,8 @@ public class TurretManager : MonoBehaviour
             }
 
             selectedIndex = 0;
+            PlayerPrefs.SetInt(SELECTED_TURRET_INDEX_KEY, selectedIndex);
+            SaveToFile();
         }
     }
 }

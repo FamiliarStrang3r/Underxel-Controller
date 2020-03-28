@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TurretSpawner : MonoBehaviour
 {
-    [SerializeField] private TurretDatabase turretDatabase = null;
     [SerializeField] private Transform spawnPoint = null;
 
     private void Start()
@@ -21,7 +20,7 @@ public class TurretSpawner : MonoBehaviour
     private void SpawnTurret()
     {
         int index = PlayerPrefs.GetInt(TurretManager.SELECTED_TURRET_INDEX_KEY, 0);
-        Turret turretPrefab = turretDatabase.GetTurret(index);
+        Turret turretPrefab = TurretDatabase.Instance.GetTurret(index);
         Instantiate(turretPrefab, spawnPoint.position, Quaternion.identity);
     }
 }
