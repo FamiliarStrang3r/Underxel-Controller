@@ -42,11 +42,11 @@ public class PlayerCamera : MonoBehaviour
         smoothInput.x = Mathf.SmoothDamp(smoothInput.x, mouseInput.x, ref smoothVelocity.x, dampSpeed);
         smoothInput.y = Mathf.SmoothDamp(smoothInput.y, mouseInput.y, ref smoothVelocity.y, dampSpeed);
 
-        yaw += smoothInput.x * inputManager.MouseSensitivity;
+        yaw += smoothInput.x * 3;
         yaw %= 360;
         transform.rotation = Quaternion.AngleAxis(yaw, Vector3.up);
 
-        pitch -= smoothInput.y * inputManager.MouseSensitivity;
+        pitch -= smoothInput.y * 3;
         pitch = Mathf.Clamp(pitch, minMax.x, minMax.y);
         pivot.localRotation = Quaternion.AngleAxis(pitch, Vector3.right);
     }

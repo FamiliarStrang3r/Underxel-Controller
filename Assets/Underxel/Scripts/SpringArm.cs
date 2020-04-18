@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpringArm : MonoBehaviour
 {
+    [SerializeField] private bool drawGizmo = false;
 	[SerializeField, Range(0, 5)] private float targetLength = 3;
     [SerializeField, Range(0, 1)] private float dampSpeed = 0;
 	[SerializeField] private LayerMask obstacleMask = 0;
@@ -58,11 +59,12 @@ public class SpringArm : MonoBehaviour
 
     private void OnDrawGizmos()
 	{
-		if (collisionSocket != null)
-		{
-            Gizmos.DrawWireSphere(collisionSocket.transform.position, collisionRadius);
-			Gizmos.color = hitObstacle ? Color.red : Color.green;
-			Gizmos.DrawLine(transform.position, collisionSocket.transform.position);
-		}
+        if (!Application.isPlaying) return;
+
+        if (!collisionSocket || !drawGizmo) return;
+
+        Gizmos.DrawWireSphere(collisionSocket.transform.position, collisionRadius);
+		Gizmos.color = hitObstacle ? Color.red : Color.green;
+		Gizmos.DrawLine(transform.position, collisionSocket.transform.position);
 	}
 }
