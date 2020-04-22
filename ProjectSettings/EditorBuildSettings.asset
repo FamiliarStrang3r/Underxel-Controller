@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Turret/Scenes/Menu.unity
-    guid: 45681f024e2c2a346b2d007758bed20e
-  - enabled: 1
-    path: Assets/Turret/Scenes/Gameplay.unity
-    guid: f312fbc9b2f20244c9963fc38a15ccf5
+    path: Assets/Ball/BallScene.unity
+    guid: 62ee7981b33306e469629fb3c1839a36
   m_configObjects: {}
