@@ -5,7 +5,7 @@ using UnityEditor;
 
 public static class MultiplayersBuildAndRun
 {
-    [MenuItem("File/Run Multiplayer/2 Players (Win)")]
+    //[MenuItem("File/Run Multiplayer/2 Players (Win)")]
     private static void PerformWin64Build2() => PerformWin64Build(2);
 
     //[MenuItem("File/Run Multiplayer/Windows/3 Players")]
