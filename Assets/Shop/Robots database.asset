@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: Robots database
   m_EditorClassIdentifier: 
   robots:
-  - sprite: {fileID: 0}
+  - sprite: {fileID: 21300090, guid: eecc30c7341cbdb4aa3033ecf9dba4c7, type: 3}
     costAmount: 100
     isOpened: 1
     prefab: {fileID: 0}
-  - sprite: {fileID: 0}
+  - sprite: {fileID: 21300090, guid: eecc30c7341cbdb4aa3033ecf9dba4c7, type: 3}
     costAmount: 200
     isOpened: 0
     prefab: {fileID: 0}
-  - sprite: {fileID: 0}
+  - sprite: {fileID: 21300090, guid: eecc30c7341cbdb4aa3033ecf9dba4c7, type: 3}
     costAmount: 300
     isOpened: 0
     prefab: {fileID: 0}
-  - sprite: {fileID: 0}
+  - sprite: {fileID: 21300090, guid: eecc30c7341cbdb4aa3033ecf9dba4c7, type: 3}
     costAmount: 400
     isOpened: 0
     prefab: {fileID: 0}

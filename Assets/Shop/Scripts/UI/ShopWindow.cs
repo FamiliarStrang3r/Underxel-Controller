@@ -17,33 +17,20 @@ public class ShopWindow : MonoBehaviour
         shopController = FindObjectOfType<ShopController>();
     }
 
-    private void Start()
-    {
-        PopulateButtons();
-        UpdateElements();
-    }
-
     private void OnEnable()
     {
-        shopController.OnMoneyChanged += OnMoneyChanged;
+        shopController.OnMoneyChanged += OnMoneyChange;
     }
 
     private void OnDisable()
     {
-        shopController.OnMoneyChanged -= OnMoneyChanged;
+        shopController.OnMoneyChanged -= OnMoneyChange;
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            for (int i = 0; i < shopElements.Length; i++)
-            {
-                var e = shopElements[i];
-                int index = e.transform.GetSiblingIndex();
-                Debug.Log(index);
-            }
-        }
+        PopulateButtons();
+        UpdateElements();
     }
 
     private void PopulateButtons()
@@ -64,7 +51,7 @@ public class ShopWindow : MonoBehaviour
             int k = i;
             element.OnClick = () => OnClick(k);
             element.name = $"Element: {i}";
-            element.transform.SetSiblingIndex(i);
+            //element.transform.SetSiblingIndex(i);
             shopElements[i] = element;
         }
     }
@@ -84,14 +71,16 @@ public class ShopWindow : MonoBehaviour
 
         if (robot.isOpened)
         {
+            //выбран новый
             shopController.SelectedIndex = buttonIndex;
         }
         else
         {
             if (shopController.MoneyAmount >= robot.costAmount)
             {
-                shopController.MoneyAmount -= robot.costAmount;
+                //покупка совершена
                 robot.isOpened = true;
+                shopController.MoneyAmount -= robot.costAmount;
             }
             else
             {
@@ -102,10 +91,9 @@ public class ShopWindow : MonoBehaviour
         UpdateElements();
     }
 
-    private void OnMoneyChanged(int amount)
+    private void OnMoneyChange(int amount)
     {
         moneyLabel.text = $"У тебя {amount} деняк";
-
-        //UpdateElements();
+        //Debug.Log("updated");
     }
 }

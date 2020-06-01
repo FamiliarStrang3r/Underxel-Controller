@@ -22,7 +22,8 @@ public class ShopElement : MonoBehaviour
 
     public void UpdateVisual(ShopItem item, bool isSelected)
     {
-        if (itemImage) itemImage.sprite = item.sprite;
+        //if (itemImage)
+        itemImage.sprite = item.sprite;
 
         bool isOpened = item.isOpened;
 
