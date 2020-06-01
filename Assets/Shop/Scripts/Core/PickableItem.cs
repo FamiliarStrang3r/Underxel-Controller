@@ -29,9 +29,9 @@ public class PickableItem : MonoBehaviour
         {
             var shop = FindObjectOfType<ShopController>();
             if (shop) shop.MoneyAmount += moneyAmount;
-            
 
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 
