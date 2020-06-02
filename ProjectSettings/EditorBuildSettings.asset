@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Ball/BallScene.unity
-    guid: 62ee7981b33306e469629fb3c1839a36
   - enabled: 1
-    path: Assets/Hole/New Scene.unity
-    guid: a276246cf365fcc4fb9150f48b23246c
+    path: Assets/Shop/Scenes/Robot Menu Scene.unity
+    guid: 0ceaab2eb8247f343b227ce95cbb628b
+  - enabled: 1
+    path: Assets/Shop/Scenes/Robot Gameplay Scene.unity
+    guid: 202f3ded0be0655468c20438e4ca53e0
   m_configObjects: {}

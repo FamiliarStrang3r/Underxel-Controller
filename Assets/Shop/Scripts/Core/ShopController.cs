@@ -7,6 +7,21 @@ using UnityEngine;
 
 public class ShopController : MonoBehaviour
 {
+    public static ShopController Instance { get; private set; }
+
+    private void InitSingleton()
+    {
+        if (!Instance)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public event Action<int> OnMoneyChanged;
 
     [SerializeField] private RobotsDatabase robotsDatabase = null;
@@ -14,7 +29,7 @@ public class ShopController : MonoBehaviour
     [SerializeField] private int startIndex = 0;
 
     private string fileName = "saveShop.json";
-
+    
     //private RobotsDatabase database = null;
     public RobotsDatabase RobotsDatabase
     {
@@ -42,8 +57,8 @@ public class ShopController : MonoBehaviour
         set
         {
             moneyAmount = value;
-            //OnMoneyChanged?.Invoke(MoneyAmount);
-            OnMoneyChanged(moneyAmount);
+            OnMoneyChanged?.Invoke(MoneyAmount);
+            //OnMoneyChanged(moneyAmount);
         }
     }
 
@@ -54,11 +69,16 @@ public class ShopController : MonoBehaviour
         set
         {
             selectedIndex = value;
+            Save();
         }
     }
 
+    public RobotController SelectedRobot => RobotsDatabase.Robots[SelectedIndex].prefab;
+
     private void Awake()
     {
+        InitSingleton();
+
         RobotsDatabase = Instantiate(robotsDatabase);
 
         Load();
@@ -76,7 +96,7 @@ public class ShopController : MonoBehaviour
 
     private void Start()
     {
-        //OnMoneyChanged?.Invoke(MoneyAmount);//invoke only at start because subscribing goes at OnEnable (after Awake, before Start)
+        OnMoneyChanged?.Invoke(MoneyAmount);//invoke only at start because subscribing goes at OnEnable (after Awake, before Start)
     }
 
     private void Load()
@@ -121,6 +141,12 @@ public class ShopController : MonoBehaviour
     private void OnMoneyChange(int amount)
     {
         Save();
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        OnMoneyChanged?.Invoke(MoneyAmount);
+        //Debug.Log(level);
     }
 }
 
