@@ -28,7 +28,8 @@ public class ShopController : MonoBehaviour
     [SerializeField] private int startMoney = 100;
     [SerializeField] private int startIndex = 0;
 
-    private string fileName = "saveShop.json";
+    //private string fileName = "saveShop.json";//old save
+    private const string k_shopKey = "SHOP_KEY";
     
     //private RobotsDatabase database = null;
     public RobotsDatabase RobotsDatabase
@@ -101,12 +102,14 @@ public class ShopController : MonoBehaviour
 
     private void Load()
     {
-        string path = Path.Combine(Application.isEditor ? Application.dataPath : Application.persistentDataPath, fileName);
-        if (File.Exists(path))
+        //string path = Path.Combine(Application.isEditor ? Application.dataPath : Application.persistentDataPath, fileName);
+        //if (File.Exists(path))
+        if (PlayerPrefs.HasKey(k_shopKey))
         {
             int maxCount = RobotsDatabase.Robots.Length;
 
-            string json = File.ReadAllText(path);
+            //string json = File.ReadAllText(path);
+            string json = PlayerPrefs.GetString(k_shopKey);
             var data = JsonUtility.FromJson<ShopData>(json);
             MoneyAmount = data.moneyAmount;
             SelectedIndex = Mathf.Clamp(data.selectedIndex, 0, maxCount - 1);
@@ -132,10 +135,17 @@ public class ShopController : MonoBehaviour
         bool[] opened = RobotsDatabase.Robots.Select(r => r.isOpened).ToArray();
         var data = new ShopData(MoneyAmount, SelectedIndex, opened);
         string json = JsonUtility.ToJson(data, true);
-        string path = Path.Combine(Application.isEditor ? Application.dataPath : Application.persistentDataPath, fileName);
-        File.WriteAllText(path, json);
+        //string path = Path.Combine(Application.isEditor ? Application.dataPath : Application.persistentDataPath, fileName);
+        //File.WriteAllText(path, json);
+        PlayerPrefs.SetString(k_shopKey, json);
 
         //Debug.Log("saved");
+    }
+
+    [ContextMenu("Delete shop save")]
+    private void DeleteSave()
+    {
+        if (PlayerPrefs.HasKey(k_shopKey)) PlayerPrefs.DeleteKey(k_shopKey);
     }
 
     private void OnMoneyChange(int amount)
